@@ -1,0 +1,7 @@
+packages:
+  - 'apps/*'
+  - 'packages/*'
+allowBuilds:
+  '@fortawesome/fontawesome-free': true
+  esbuild: true
+  sharp: true

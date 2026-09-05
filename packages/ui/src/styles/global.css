@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+/* 内容扫描：web 应用与 ui 包源码 */
+@source "../../../../apps/web/src";
+@source "../";
+
+@import "tw-animate-css";
+
+/* VidSpark 主题与设计令牌 */
+@import "./theme/index.css";
+
+/* 基础层 */
+@import "./base/index.css";
+
+/* 组件层（原 vidspark-static 样式体系移植） */
+@import "./components/index.css";
+
+/* 工具层 */
+@import "./utilities/index.css";

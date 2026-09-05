@@ -1,0 +1,17 @@
+/* ==========================================================================
+   组件层：原 vidspark-static 两套样式体系的移植
+   加载顺序与原站点一致：
+   element（app.css 提取） -> 页面组件 -> 品牌组件 -> 工作室 -> 工作台
+   -> 文档 -> 手写设计系统 -> 手写补丁
+   ========================================================================== */
+@import "./element-legacy.css";
+@import "./ref-pages.css";
+@import "./ref-brand.css";
+@import "./ref-studio.css";
+@import "./ref-workbench.css";
+@import "./ref-docs.css";
+/* design-system.css 仅分镜工作室页使用，经 @workspace/ui/design-system.css 按需引入 */
+@import "./overrides.css";
+/* 页面内联 <style> 提取：仅对应页面按需引入，避免通用类全局污染
+   - inline-dashboard.css        -> @workspace/ui/inline-dashboard.css（/dashboard）
+   - inline-storyboard-studio.css-> @workspace/ui/inline-storyboard-studio.css（/storyboard-studio） */

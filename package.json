@@ -1,0 +1,27 @@
+{
+  "name": "nextspark",
+  "version": "0.0.1",
+  "private": true,
+  "description": "VidSpark — Next.js rewrite of vidspark-static (pnpm + turbo monorepo)",
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "check-types": "turbo check-types",
+    "format": "prettier --write \"**/*.{js,ts,tsx,md,json}\"",
+    "clean": "node -e \"const fs=require('fs');for(const d of ['node_modules','apps/web/node_modules','apps/web/.next','packages/ui/node_modules','.turbo'])fs.rmSync(d,{recursive:true,force:true})\""
+  },
+  "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/typescript-config": "workspace:*",
+    "prettier": "^3.8.3",
+    "turbo": "^2.9.16",
+    "typescript": "6.0.3"
+  },
+  "packageManager": "pnpm@11.5.1",
+  "engines": {
+    "node": ">=24.16.0",
+    "pnpm": ">=11.5.1"
+  }
+}

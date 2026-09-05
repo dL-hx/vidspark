@@ -1,0 +1,99 @@
+/* 提取自 vidspark-static dashboard.html 的内联 <style> */
+#detailView .dt-thumb {
+        width: 100%;
+        height: 11rem;
+        object-fit: cover;
+        display: block;
+      }
+      @media (min-width: 768px) {
+        #detailView .dt-thumb {
+          width: 18rem;
+          height: 10.5rem;
+        }
+      }
+      #sumSettingsDialog {
+        background: rgba(15, 23, 42, 0.5);
+      }
+      .opacity-0 {
+        opacity: 0;
+      }
+      .opacity-100 {
+        opacity: 1;
+      }
+      .pointer-events-none {
+        pointer-events: none;
+      }
+      .-ml-64 {
+        margin-left: -16rem;
+      }
+      #app .opacity-0 {
+        opacity: 0 !important;
+      }
+      #el-popover-9603,
+      #el-popover-2406 {
+        top: calc(100% + 10px);
+        right: 0;
+        left: auto;
+        margin: 0;
+      }
+      .type-card .check-indicator {
+        display: none;
+      }
+      .type-card.active .check-indicator {
+        display: flex;
+      }
+      .platform-icon .icon-text {
+        font-size: 10px;
+        font-weight: 700;
+        color: #fff;
+        line-height: 1;
+      }
+      #feedbackModal[hidden],
+      #contactModal[hidden] {
+        display: none;
+      }
+      .material-preview {
+        margin-top: 16px;
+        background: #f7f8fa;
+        border: 1px solid #eef0f4;
+        border-radius: 12px;
+        padding: 14px 16px;
+      }
+      .material-preview .mp-section + .mp-section {
+        margin-top: 12px;
+      }
+      .material-preview .mp-label {
+        font-size: 12px;
+        font-weight: 700;
+        color: #475569;
+        margin-bottom: 8px;
+      }
+      .material-preview .mp-label .mp-count {
+        color: #94a3b8;
+        font-weight: 500;
+      }
+      .material-preview .mp-box {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 10px 14px;
+        overflow-y: auto;
+        font-size: 13px;
+        color: #3f4a5a;
+        line-height: 1.9;
+      }
+      .material-preview .mp-summary {
+        max-height: 176px;
+      }
+      .material-preview .mp-transcript {
+        max-height: 150px;
+      }
+      .material-preview .mp-box p {
+        margin: 0 0 4px;
+      }
+      .material-preview .mp-box p:last-child {
+        margin-bottom: 0;
+      }
+      .material-preview .mp-box strong {
+        color: #1e293b;
+      }
