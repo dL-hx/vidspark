@@ -79,12 +79,12 @@ export function StoryboardStudio() {
  return () => document.removeEventListener('click', close);
  }, []);
 
- /* 从地址栏参数恢复视图（与线上格式一致；异步执行以避免渲染期状态级联） */
+ /* 从地址栏参数恢复视图（browserRouter 格式；异步执行以避免渲染期状态级联） */
  useEffect(() => {
  const t = window.setTimeout(() => {
- const m = window.location.hash.match(/#\/storyboard-studio\/(\d+)(?:\?([^#]*))?/);
+ const m = window.location.pathname.match(/^\/storyboard-studio\/(\d+)\/?$/);
  if (!m) return;
- const q = new URLSearchParams(m[2] || '');
+ const q = new URLSearchParams(window.location.search);
  /* 与脚本一致：恢复时打开种子项目（id 固定为 2382） */
  setProjectItem({ kind: 'seed', name: SEED_NAME });
  setSeed(true);
