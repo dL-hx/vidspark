@@ -24,7 +24,6 @@ interface ProjectItem {
 /** 分镜成片工作流主组件（两阶段工作流状态机） */
 export function StoryboardStudio() {
  const [collapsed, setCollapsed] = useState(false);
- const [userMenuOpen, setUserMenuOpen] = useState(false);
  const [feedbackOpen, setFeedbackOpen] = useState(false);
  const [contactOpen, setContactOpen] = useState(false);
  const [view, setView] = useState<'new' | 'project'>('new');
@@ -67,17 +66,6 @@ export function StoryboardStudio() {
  },
  [],
  );
-
- /* 点击空白处关闭用户菜单（与 dashboard 行为一致） */
- useEffect(() => {
- const close = (e: MouseEvent) => {
- const t = e.target as HTMLElement;
- if (t.closest('[data-pop-region]')) return;
- setUserMenuOpen(false);
- };
- document.addEventListener('click', close);
- return () => document.removeEventListener('click', close);
- }, []);
 
  /* 从地址栏参数恢复视图（browserRouter 格式；异步执行以避免渲染期状态级联） */
  useEffect(() => {
@@ -193,19 +181,11 @@ export function StoryboardStudio() {
  <StudioSidebar
  projectName={projectItem.name}
  projectId={projectItem.kind === 'seed' ? 'projSeed' : 'projItem'}
- userMenuOpen={userMenuOpen}
  onCollapse={() => setCollapsed(true)}
  onNewTask={handleNewTask}
  onProjectClick={handleProjectClick}
- onToggleUserMenu={() => setUserMenuOpen((v) => !v)}
- onOpenFeedback={() => {
- setUserMenuOpen(false);
- setFeedbackOpen(true);
- }}
- onOpenContact={() => {
- setUserMenuOpen(false);
- setContactOpen(true);
- }}
+ onOpenFeedback={() => setFeedbackOpen(true)}
+ onOpenContact={() => setContactOpen(true)}
  />
 
  <main className="studio-main">

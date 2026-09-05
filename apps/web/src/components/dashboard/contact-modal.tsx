@@ -1,28 +1,20 @@
 'use client';
 
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@workspace/ui/components/ui/dialog';
+
 interface ContactModalProps {
  open: boolean;
  onClose: () => void;
 }
 
-/** 联系我们弹窗 */
+/** 联系我们弹窗（shadcn Dialog） */
 export function ContactModal({ open, onClose }: ContactModalProps) {
  return (
- <div
- id="contactModal"
- hidden={!open}
- onClick={(e) => {
- if (e.target === e.currentTarget) onClose();
- }}
- className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4 transition-all"
- >
- <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 transform transition-all scale-100">
- <div className="flex justify-between items-center mb-6">
- <h3 className="text-xl font-bold text-slate-900">联系我们</h3>
- <button data-modal-close onClick={onClose} className="text-slate-400 hover:text-slate-600 transition-colors">
- <i className="fa-solid fa-xmark text-xl"></i>
- </button>
- </div>
+ <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
+ <DialogContent className="max-w-md rounded-2xl">
+ <DialogHeader>
+ <DialogTitle className="text-xl font-bold text-slate-900">联系我们</DialogTitle>
+ </DialogHeader>
  <div className="space-y-4">
  <div className="p-4 bg-green-50 rounded-xl">
  <div className="flex items-center gap-3 mb-3">
@@ -55,7 +47,7 @@ export function ContactModal({ open, onClose }: ContactModalProps) {
  <span className="text-xs text-slate-400 mt-1 block">我们将尽快回复您的消息</span>
  </p>
  </div>
- </div>
- </div>
+ </DialogContent>
+ </Dialog>
  );
 }

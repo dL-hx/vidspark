@@ -7,11 +7,9 @@ import { UserMenu } from '@/components/common/user-menu';
 interface StudioSidebarProps {
  projectName: string;
  projectId: 'projSeed' | 'projItem';
- userMenuOpen: boolean;
  onCollapse: () => void;
  onNewTask: () => void;
  onProjectClick: () => void;
- onToggleUserMenu: () => void;
  onOpenFeedback: () => void;
  onOpenContact: () => void;
 }
@@ -20,11 +18,9 @@ interface StudioSidebarProps {
 export function StudioSidebar({
  projectName,
  projectId,
- userMenuOpen,
  onCollapse,
  onNewTask,
  onProjectClick,
- onToggleUserMenu,
  onOpenFeedback,
  onOpenContact,
 }: StudioSidebarProps) {
@@ -80,20 +76,19 @@ export function StudioSidebar({
  </div>
  </div>
  <div data-pop-region className="studio-sidebar-footer">
- <button
- className="studio-user-trigger"
- onClick={(e) => {
- e.stopPropagation();
- onToggleUserMenu();
- }}
- >
+ <UserMenu
+ trigger={
+ <button className="studio-user-trigger">
  <img
  src="https://thirdwx.qlogo.cn/mmopen/vi_32/dYZ9vmoSW03wrqbGy5SZE6r40FkqYcTbfkHHJib3X1Luqsz1UVJpEXtS85AEiaO4RhV9niaMxOQ1icGRZ2aOf9UP3w/132"
  alt="User"
  className="studio-user-avatar"
  />
  </button>
- <UserMenu open={userMenuOpen} onOpenFeedback={onOpenFeedback} onOpenContact={onOpenContact} />
+ }
+ onOpenFeedback={onOpenFeedback}
+ onOpenContact={onOpenContact}
+ />
  </div>
  </aside>
  );

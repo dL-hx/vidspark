@@ -1,52 +1,72 @@
 'use client';
 
+import type { ReactElement } from 'react';
 import Link from 'next/link';
 
+import {
+ DropdownMenu,
+ DropdownMenuContent,
+ DropdownMenuItem,
+ DropdownMenuLabel,
+ DropdownMenuTrigger,
+} from '@workspace/ui/components/ui/dropdown-menu';
+
 interface UserMenuProps {
- open: boolean;
+ /** 触发元素（头像按钮），原样渲染 */
+ trigger: ReactElement;
  onOpenFeedback: () => void;
  onOpenContact: () => void;
+ /** 菜单开合变化（用于联动关闭其它弹层） */
+ onOpenChange?: (open: boolean) => void;
 }
 
-/** 公共用户菜单：dashboard 与分镜工作室侧栏共用（头像触发，向上弹出） */
-export function UserMenu({ open, onOpenFeedback, onOpenContact }: UserMenuProps) {
+/** 公共用户菜单（shadcn DropdownMenu）：头像触发，向上弹出，自管开合与点击外部关闭 */
+export function UserMenu({ trigger, onOpenFeedback, onOpenContact, onOpenChange }: UserMenuProps) {
  return (
- <div
- hidden={!open}
- onClick={(e) => e.stopPropagation()}
- className="absolute bottom-full left-0 w-full mb-2 bg-white border border-gray-200 rounded-xl shadow-xl py-2 z-50 min-w-[200px]"
+ <DropdownMenu onOpenChange={onOpenChange}>
+ <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
+ <DropdownMenuContent
+ side="top"
+ align="start"
+ sideOffset={8}
+ className="w-[var(--radix-dropdown-menu-trigger-width)] min-w-[200px] rounded-xl py-2"
  >
- <div className="px-4 py-2 border-b border-gray-100 mb-1">
+ <DropdownMenuLabel className="px-4 py-2 mb-1 border-b border-gray-100 font-normal">
  <p className="text-sm font-bold text-slate-900 truncate">异维A酸</p>
  <p className="text-xs text-slate-500 truncate mt-1">Free</p>
- </div>
- <Link
- href="/membership"
- className="block w-full text-left px-4 py-2.5 text-sm text-amber-600 hover:bg-amber-50 flex items-center gap-2 font-medium"
+ </DropdownMenuLabel>
+ <DropdownMenuItem
+ asChild
+ className="px-4 py-2.5 text-sm text-amber-600 hover:bg-amber-50 focus:bg-amber-50 focus:text-amber-600 font-medium cursor-pointer"
  >
+ <Link href="/membership">
  <i className="fa-solid fa-crown w-5 text-center"></i> 升级会员{' '}
  </Link>
- <Link
- href="/member-center"
- className="block w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:bg-gray-50 hover:text-slate-900 flex items-center gap-2"
+ </DropdownMenuItem>
+ <DropdownMenuItem
+ asChild
+ className="px-4 py-2.5 text-sm text-slate-600 hover:bg-gray-50 hover:text-slate-900 focus:bg-gray-50 focus:text-slate-900 cursor-pointer"
  >
+ <Link href="/member-center">
  <i className="fa-solid fa-user-gear w-5 text-center"></i> 会员中心{' '}
  </Link>
- <button
- onClick={onOpenFeedback}
- className="w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:bg-gray-50 hover:text-slate-900 flex items-center gap-2"
+ </DropdownMenuItem>
+ <DropdownMenuItem
+ onSelect={onOpenFeedback}
+ className="px-4 py-2.5 text-sm text-slate-600 hover:bg-gray-50 hover:text-slate-900 focus:bg-gray-50 focus:text-slate-900 cursor-pointer"
  >
  <i className="fa-regular fa-comment-dots w-5 text-center"></i> 意见反馈
- </button>
- <button
- onClick={onOpenContact}
- className="w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:bg-gray-50 hover:text-slate-900 flex items-center gap-2"
+ </DropdownMenuItem>
+ <DropdownMenuItem
+ onSelect={onOpenContact}
+ className="px-4 py-2.5 text-sm text-slate-600 hover:bg-gray-50 hover:text-slate-900 focus:bg-gray-50 focus:text-slate-900 cursor-pointer"
  >
  <i className="fa-regular fa-envelope w-5 text-center"></i> 联系我们
- </button>
- <button className="w-full text-left px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 flex items-center gap-2">
+ </DropdownMenuItem>
+ <DropdownMenuItem className="px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 focus:bg-red-50 focus:text-red-500 cursor-pointer">
  <i className="fa-solid fa-arrow-right-from-bracket w-5 text-center"></i> 退出登录
- </button>
- </div>
+ </DropdownMenuItem>
+ </DropdownMenuContent>
+ </DropdownMenu>
  );
 }

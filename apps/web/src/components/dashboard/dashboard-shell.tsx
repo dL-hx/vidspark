@@ -25,7 +25,6 @@ export function DashboardShell() {
  const [tab, setTab] = useState(0);
  const [notifOpen, setNotifOpen] = useState(false);
  const [miniOpen, setMiniOpen] = useState(false);
- const [userMenuOpen, setUserMenuOpen] = useState(false);
  const [feedbackOpen, setFeedbackOpen] = useState(false);
  const [contactOpen, setContactOpen] = useState(false);
  const [ssOpen, setSsOpen] = useState(false);
@@ -44,14 +43,13 @@ export function DashboardShell() {
  if (el) el.scrollTop = 0;
  }, [view]);
 
- // 点击页面空白处关闭顶栏弹层与用户菜单
+ // 点击页面空白处关闭顶栏弹层
  useEffect(() => {
  const closeAll = (e: MouseEvent) => {
  const t = e.target as HTMLElement;
  if (t.closest('[data-pop-region]')) return;
  setNotifOpen(false);
  setMiniOpen(false);
- setUserMenuOpen(false);
  };
  document.addEventListener('click', closeAll);
  return () => document.removeEventListener('click', closeAll);
@@ -60,7 +58,6 @@ export function DashboardShell() {
  const closeTopPops = useCallback(() => {
  setNotifOpen(false);
  setMiniOpen(false);
- setUserMenuOpen(false);
  }, []);
 
  const show = useCallback((name: View) => setView(name), []);
@@ -89,16 +86,11 @@ export function DashboardShell() {
  <DashboardSidebar
  collapsed={collapsed}
  tab={tab}
- userMenuOpen={userMenuOpen}
  onCollapse={() => setCollapsed(true)}
  onNewTask={() => show('home')}
  onExplore={() => show('explore')}
  onTab={handleTab}
- onToggleUserMenu={() => {
- const next = !userMenuOpen;
- closeTopPops();
- setUserMenuOpen(next);
- }}
+ onUserMenuOpenChange={(open) => open && closeTopPops()}
  onOpenDetail={() => show('detail')}
  onOpenFeedback={() => {
  closeTopPops();

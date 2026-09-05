@@ -1,6 +1,10 @@
 'use client';
 
-import { useEffect, useState, type ReactNode } from 'react';
+import { useState } from 'react';
+
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@workspace/ui/components/ui/dialog';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@workspace/ui/components/ui/select';
+import { Switch } from '@workspace/ui/components/ui/switch';
 
 /** 总结设置状态（与触发器上的芯片文案对应） */
 export interface SumSettings {
@@ -29,8 +33,6 @@ const MODEL_ITEMS: ModelItem[] = [
  { value: 'deepseek-v4-pro', label: 'deepseek-v4-pro (2x credit)', credit: '2x credit', disabled: true },
 ];
 
-type SelKey = 'lang' | 'model' | null;
-
 interface SumSettingsDialogProps {
  open: boolean;
  /** 已提交生效的设置 */
@@ -39,145 +41,55 @@ interface SumSettingsDialogProps {
  onClose: () => void;
 }
 
-/** element 风格下拉选择（总结设置弹窗内用） */
-function SsSelect(props: {
- placeholder: string;
- minWidth?: number;
- open: boolean;
- onToggle: () => void;
- value: string;
- children: ReactNode;
-}) {
- const { placeholder, minWidth, open, onToggle, value, children } = props;
- return (
- <div className="el-select w-full el-select--medium">
- <div
- className="el-input el-input--medium el-input--suffix"
- onClick={(e) => {
- e.stopPropagation();
- onToggle();
- }}
- >
- <input type="text" readOnly autoComplete="off" placeholder={placeholder} value={value} className="el-input__inner" />
- <span className="el-input__suffix">
- <span className="el-input__suffix-inner">
- <i className={`el-select__caret el-input__icon el-icon-arrow-up ${open ? 'is-reverse' : ''}`}></i>
- </span>
- </span>
- </div>
- <div
- className="el-select-dropdown el-popper"
- style={{ display: open ? undefined : 'none', minWidth: minWidth ?? undefined }}
- >
- <div className="el-scrollbar">
- <div className="el-select-dropdown__wrap el-scrollbar__wrap" style={{ marginBottom: -15, marginRight: -15 }}>
- <ul className="el-scrollbar__view el-select-dropdown__list">{children}</ul>
- </div>
- <div className="el-scrollbar__bar is-horizontal">
- <div className="el-scrollbar__thumb" style={{ transform: 'translateX(0%)' }}></div>
- </div>
- <div className="el-scrollbar__bar is-vertical">
- <div className="el-scrollbar__thumb" style={{ transform: 'translateY(0%)' }}></div>
- </div>
- </div>
- </div>
- </div>
- );
-}
-
-/** 总结设置弹窗（el-dialog）：打开时重新挂载内部表单以重置草稿（同原站 ssOpen -> ssRender） */
+/** 总结设置弹窗（shadcn Dialog）：关闭时内容卸载，重新打开即重置草稿 */
 export function SumSettingsDialog({ open, settings, onCommit, onClose }: SumSettingsDialogProps) {
  return (
- <div
- id="sumSettingsDialog"
- className="el-dialog__wrapper"
- style={{ display: open ? undefined : 'none', zIndex: open ? 2003 : undefined }}
- onClick={(e) => {
- if (e.target === e.currentTarget) onClose();
- }}
- >
- {open && <SumSettingsDialogInner settings={settings} onCommit={onCommit} onClose={onClose} />}
- </div>
+ <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
+ <DialogContent className="max-w-[400px] rounded-2xl">
+ <DialogHeader>
+ <DialogTitle>总结设置</DialogTitle>
+ </DialogHeader>
+ <SumSettingsDialogInner settings={settings} onCommit={onCommit} onClose={onClose} />
+ </DialogContent>
+ </Dialog>
  );
 }
 
-function SumSettingsDialogInner({
- settings,
- onCommit,
- onClose,
-}: Omit<SumSettingsDialogProps, 'open'>) {
+function SumSettingsDialogInner({ settings, onCommit, onClose }: Omit<SumSettingsDialogProps, 'open'>) {
  const [follow, setFollow] = useState(settings.follow);
  const [lang, setLang] = useState(settings.lang);
  const [level, setLevel] = useState(settings.level);
  const [model, setModel] = useState(settings.model);
- const [openSel, setOpenSel] = useState<SelKey>(null);
-
- useEffect(() => {
- const close = () => setOpenSel(null);
- document.addEventListener('click', close);
- return () => document.removeEventListener('click', close);
- }, []);
-
- const langLabel = lang;
- const modelItem = MODEL_ITEMS.find((m) => m.value === model) ?? { value: 'qwen-flash', label: 'qwen-flash (0.2x credit)', credit: '0.2x credit', disabled: false };
 
  return (
- <div role="dialog" aria-modal="true" aria-label="总结设置" className="el-dialog rounded-2xl" style={{ marginTop: '15vh', width: 400 }}>
- <div className="el-dialog__header">
- <span className="el-dialog__title">总结设置</span>
- <button type="button" aria-label="Close" className="el-dialog__headerbtn" onClick={onClose}>
- <i className="el-dialog__close el-icon el-icon-close"></i>
- </button>
- </div>
- <div className="el-dialog__body">
+ <>
  <div className="space-y-6 py-2">
  <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
  <div>
  <span className="text-slate-900 font-bold block">跟随视频原声</span>
  <span className="text-slate-500 text-xs">自动检测视频语言并使用相同语言总结</span>
  </div>
- <div
- id="ssFollowSwitch"
- role="switch"
- aria-checked={follow}
- className={`el-switch ${follow ? 'is-checked' : ''}`}
- onClick={() => setFollow((v) => !v)}
- >
- <input type="checkbox" checked={follow} onChange={() => {}} className="el-switch__input" />
- <span
- className="el-switch__core"
- style={{
- width: 40,
- borderColor: follow ? 'rgb(79, 70, 229)' : '',
- backgroundColor: follow ? 'rgb(79, 70, 229)' : '',
- }}
- ></span>
+ <Switch
+ checked={follow}
+ onCheckedChange={setFollow}
+ className="data-[state=checked]:bg-indigo-600"
+ aria-label="跟随视频原声"
+ />
  </div>
- </div>
- <div id="ssLangSection" className="space-y-2" hidden={follow}>
+ <div className="space-y-2" hidden={follow}>
  <label className="text-slate-700 font-bold block text-sm">目标语言</label>
- <SsSelect
- placeholder="请选择语言"
- minWidth={360}
- open={openSel === 'lang'}
- onToggle={() => setOpenSel(openSel === 'lang' ? null : 'lang')}
- value={langLabel}
- >
+ <Select value={lang} onValueChange={setLang}>
+ <SelectTrigger className="w-full">
+ <SelectValue placeholder="请选择语言" />
+ </SelectTrigger>
+ <SelectContent>
  {LANG_OPTIONS.map((l) => (
- <li
- key={l}
- data-value={l}
- data-label={l}
- className={`el-select-dropdown__item ${lang === l ? 'selected' : ''}`}
- onClick={() => {
- setLang(l);
- setOpenSel(null);
- }}
- >
- <span>{l}</span>
- </li>
+ <SelectItem key={l} value={l}>
+ {l}
+ </SelectItem>
  ))}
- </SsSelect>
+ </SelectContent>
+ </Select>
  </div>
  <div className="space-y-2">
  <label className="text-slate-700 font-bold block text-sm">总结详细程度</label>
@@ -208,40 +120,27 @@ function SumSettingsDialogInner({
  </div>
  <div className="space-y-2">
  <label className="text-slate-700 font-bold block text-sm">AI 模型</label>
- <SsSelect
- placeholder="选择模型"
- minWidth={360}
- open={openSel === 'model'}
- onToggle={() => setOpenSel(openSel === 'model' ? null : 'model')}
- value={modelItem.label}
- >
+ <Select value={model} onValueChange={setModel}>
+ <SelectTrigger className="w-full">
+ <SelectValue placeholder="选择模型" />
+ </SelectTrigger>
+ <SelectContent>
  {MODEL_ITEMS.map((m) => (
- <li
- key={m.value}
- data-value={m.value}
- data-label={m.label}
- className={`el-select-dropdown__item ${model === m.value ? 'selected' : ''} ${m.disabled ? 'is-disabled' : ''}`}
- onClick={() => {
- if (m.disabled) return;
- setModel(m.value);
- setOpenSel(null);
- }}
- >
- <div className="flex items-center justify-between w-full">
+ <SelectItem key={m.value} value={m.value} disabled={m.disabled}>
+ <span className="flex items-center gap-2">
  <span>{m.value}</span>
  <span className="text-xs text-gray-400">
  {m.credit} {m.disabled && <span className="ml-1 text-orange-500">Plus</span>}
  </span>
- </div>
- </li>
+ </span>
+ </SelectItem>
  ))}
- </SsSelect>
+ </SelectContent>
+ </Select>
  <div className="text-xs text-slate-400">thinking 模型处理速度较慢</div>
  </div>
  </div>
- </div>
- <div className="el-dialog__footer">
- <div className="dialog-footer">
+ <div className="flex justify-end pt-2">
  <button
  data-ss-cancel
  onClick={onClose}
@@ -260,7 +159,6 @@ function SumSettingsDialogInner({
  确定
  </button>
  </div>
- </div>
- </div>
+ </>
  );
 }

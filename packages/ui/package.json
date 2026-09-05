@@ -67,8 +67,7 @@
     "./inline-storyboard-studio.css": "./src/styles/components/inline-storyboard-studio.css",
     "./postcss.config": "./postcss.config.mjs",
     "./lib/*": "./src/lib/*.ts",
-    "./components/*": "./src/components/*.tsx",
-    "./components/ui/*": "./src/components/ui/*.tsx",
+    "./components/ui/*": "./src/ui/*.tsx",
     "./hooks/*": "./src/hooks/*.ts"
   }
 }

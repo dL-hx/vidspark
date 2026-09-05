@@ -2,6 +2,13 @@
 
 import { useState } from 'react';
 
+import { Button } from '@workspace/ui/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@workspace/ui/components/ui/dialog';
+import { Input } from '@workspace/ui/components/ui/input';
+import { Label } from '@workspace/ui/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@workspace/ui/components/ui/select';
+import { Textarea } from '@workspace/ui/components/ui/textarea';
+
 import { vsToast } from '@/lib/toast';
 
 interface FeedbackModalProps {
@@ -9,64 +16,55 @@ interface FeedbackModalProps {
  onClose: () => void;
 }
 
-/** 意见反馈弹窗 */
+const FIELD_CLS =
+ 'h-auto px-4 py-3 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500';
+
+/** 意见反馈弹窗（shadcn Dialog + Select/Input/Textarea） */
 export function FeedbackModal({ open, onClose }: FeedbackModalProps) {
+ const [type, setType] = useState('1');
  const [content, setContent] = useState('');
  const disabled = content.trim() === '';
 
  return (
- <div
- id="feedbackModal"
- hidden={!open}
- onClick={(e) => {
- if (e.target === e.currentTarget) onClose();
- }}
- className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4 transition-all"
- >
- <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 transform transition-all scale-100">
- <div className="flex justify-between items-center mb-6">
- <h3 className="text-xl font-bold text-slate-900">意见反馈</h3>
- <button data-modal-close onClick={onClose} className="text-slate-400 hover:text-slate-600 transition-colors">
- <i className="fa-solid fa-xmark text-xl"></i>
- </button>
- </div>
+ <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
+ <DialogContent className="max-w-md rounded-2xl">
+ <DialogHeader>
+ <DialogTitle className="text-xl font-bold text-slate-900">意见反馈</DialogTitle>
+ </DialogHeader>
  <div className="space-y-4">
- <div>
- <label className="block text-sm font-medium text-slate-700 mb-2">反馈类型</label>
- <select
- defaultValue="1"
- className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
- >
- <option value="1">功能建议</option>
- <option value="2">Bug反馈</option>
- <option value="3">产品咨询</option>
- <option value="4">其他</option>
- </select>
+ <div className="space-y-2">
+ <Label className="text-sm font-medium text-slate-700">反馈类型</Label>
+ <Select value={type} onValueChange={setType}>
+ <SelectTrigger className={FIELD_CLS}>
+ <SelectValue />
+ </SelectTrigger>
+ <SelectContent>
+ <SelectItem value="1">功能建议</SelectItem>
+ <SelectItem value="2">Bug反馈</SelectItem>
+ <SelectItem value="3">产品咨询</SelectItem>
+ <SelectItem value="4">其他</SelectItem>
+ </SelectContent>
+ </Select>
  </div>
- <div>
- <label className="block text-sm font-medium text-slate-700 mb-2">
+ <div className="space-y-2">
+ <Label className="text-sm font-medium text-slate-700">
  反馈内容 <span className="text-red-500">*</span>
- </label>
- <textarea
+ </Label>
+ <Textarea
  rows={4}
  placeholder="请详细描述您的建议或问题..."
  value={content}
  onChange={(e) => setContent(e.target.value)}
- className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all resize-none"
- ></textarea>
- </div>
- <div>
- <label className="block text-sm font-medium text-slate-700 mb-2">
- 联系方式 <span className="text-slate-400 font-normal">(可选)</span>
- </label>
- <input
- type="text"
- placeholder="邮箱或微信，方便我们联系您"
- className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
+ className={`${FIELD_CLS} placeholder-slate-400 resize-none`}
  />
  </div>
- <button
- data-feedback-submit
+ <div className="space-y-2">
+ <Label className="text-sm font-medium text-slate-700">
+ 联系方式 <span className="text-slate-400 font-normal">(可选)</span>
+ </Label>
+ <Input type="text" placeholder="邮箱或微信，方便我们联系您" className={`${FIELD_CLS} placeholder-slate-400`} />
+ </div>
+ <Button
  disabled={disabled}
  onClick={() => {
  vsToast('反馈已提交，感谢您的支持！');
@@ -76,9 +74,9 @@ export function FeedbackModal({ open, onClose }: FeedbackModalProps) {
  className="w-full bg-gradient-to-r from-brand-600 to-blue-600 hover:from-brand-700 hover:to-blue-700 text-white font-bold py-3 rounded-xl shadow-lg transition-all hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
  >
  <i className="fa-solid fa-paper-plane"></i> 提交反馈
- </button>
+ </Button>
  </div>
- </div>
- </div>
+ </DialogContent>
+ </Dialog>
  );
 }

@@ -15,13 +15,12 @@ interface DashboardSidebarProps {
  collapsed: boolean;
  /** 0=总结 1=创作 */
  tab: number;
- userMenuOpen: boolean;
  onCollapse: () => void;
  onNewTask: () => void;
  onExplore: () => void;
  /** idx: 0=总结 1=创作 2=分镜（分镜直接跳走） */
  onTab: (idx: number) => void;
- onToggleUserMenu: () => void;
+ onUserMenuOpenChange?: (open: boolean) => void;
  onOpenDetail: () => void;
  onOpenFeedback: () => void;
  onOpenContact: () => void;
@@ -31,12 +30,11 @@ interface DashboardSidebarProps {
 export function DashboardSidebar({
  collapsed,
  tab,
- userMenuOpen,
  onCollapse,
  onNewTask,
  onExplore,
  onTab,
- onToggleUserMenu,
+ onUserMenuOpenChange,
  onOpenDetail,
  onOpenFeedback,
  onOpenContact,
@@ -186,22 +184,20 @@ export function DashboardSidebar({
  </div>
  </div>
  <div data-pop-region className="pt-2 pb-2 px-6 relative mt-auto">
- <div className="relative group w-full">
- <div
- onClick={(e) => {
- e.stopPropagation();
- onToggleUserMenu();
- }}
- className="flex items-center w-full py-1 pl-1 pr-1 rounded-xl hover:bg-gray-100 cursor-pointer transition-colors"
- >
+ <UserMenu
+ trigger={
+ <div className="flex items-center w-full py-1 pl-1 pr-1 rounded-xl hover:bg-gray-100 cursor-pointer transition-colors">
  <img
  src="https://thirdwx.qlogo.cn/mmopen/vi_32/dYZ9vmoSW03wrqbGy5SZE6r40FkqYcTbfkHHJib3X1Luqsz1UVJpEXtS85AEiaO4RhV9niaMxOQ1icGRZ2aOf9UP3w/132"
  alt="User"
  className="w-8 h-8 rounded-full bg-gray-200 shrink-0 border border-gray-200 hover:ring-2 hover:ring-brand-500 transition-all"
  />
  </div>
- <UserMenu open={userMenuOpen} onOpenFeedback={onOpenFeedback} onOpenContact={onOpenContact} />
- </div>
+ }
+ onOpenFeedback={onOpenFeedback}
+ onOpenContact={onOpenContact}
+ onOpenChange={onUserMenuOpenChange}
+ />
  </div>
  </aside>
  );

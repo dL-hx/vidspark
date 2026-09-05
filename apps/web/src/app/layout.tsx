@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import '@workspace/ui/global.css';
 
-import { ToastProvider } from '@/components/common/toast-provider';
+import { Toaster } from '@workspace/ui/components/ui/sonner';
 
 export const metadata: Metadata = {
  title: '首页 | 智能AI视频创作与内容生成',
@@ -20,7 +20,7 @@ export default function RootLayout({
  <html lang="zh-CN">
  <body>
  {children}
- <ToastProvider />
+ <Toaster position="top-center" richColors duration={2400} />
  </body>
  </html>
  );
