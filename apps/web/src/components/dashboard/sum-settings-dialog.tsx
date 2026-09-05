@@ -45,7 +45,7 @@ interface SumSettingsDialogProps {
 export function SumSettingsDialog({ open, settings, onCommit, onClose }: SumSettingsDialogProps) {
  return (
  <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
- <DialogContent className="max-w-[400px] rounded-2xl">
+ <DialogContent animation="top-fade" className="max-w-[400px] rounded-2xl">
  <DialogHeader>
  <DialogTitle>总结设置</DialogTitle>
  </DialogHeader>
